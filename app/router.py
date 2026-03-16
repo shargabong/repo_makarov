@@ -3,9 +3,9 @@ from typing import Generator
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlmodel import Session
 
-from model import ProductCreate, ProductOut, ProductUpdate
-from repository import ProductRepository, get_session
-from service import ProductService
+from .model import ProductCreate, ProductOut, ProductUpdate
+from .repository import ProductRepository, get_session
+from .service import ProductService
 
 router = APIRouter(prefix="/products", tags=["products"])
 
@@ -93,4 +93,3 @@ def delete_product(
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-    

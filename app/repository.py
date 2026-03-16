@@ -2,8 +2,8 @@ from typing import Generator
 
 from sqlmodel import Session, SQLModel, create_engine, select
 
-from model import Product, ProductCreate, ProductUpdate
-from settings import settings
+from .model import Product, ProductCreate, ProductUpdate
+from .settings import settings
 
 engine = create_engine(settings.DATABASE_URL, echo=settings.DEBUG)
 

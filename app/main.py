@@ -3,9 +3,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
-from repository import init_db
-from router import router
-from settings import settings
+from .repository import init_db
+from .router import router
+from .settings import settings
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
