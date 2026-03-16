@@ -1,15 +1,18 @@
+from typing import Generator
+
 from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
+from sqlmodel import Session
 
 from model import ProductCreate, ProductOut, ProductUpdate
 from repository import ProductRepository, get_session
 from service import ProductService
 
-
 router = APIRouter(prefix="/products", tags=["products"])
 
+def get_db_session() -> Generator[Session, None, None]:
+    yield from get_session()
 
-def get_service():
-    session = next(get_session())
+def get_service(session: Session = Depends(get_db_session)) -> ProductService:
     repo = ProductRepository(session)
     return ProductService(repo)
 
@@ -56,7 +59,6 @@ def get_product(
         )
     return product
 
-
 @router.put("/{product_id}", response_model=ProductOut)
 def update_product(
     product_id: int,
@@ -73,7 +75,6 @@ def update_product(
             ) from error
         raise
 
-
 @router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_product(
     product_id: int,
@@ -88,4 +89,8 @@ def delete_product(
                 detail="Product not found",
             ) from error
         raise
+
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+    

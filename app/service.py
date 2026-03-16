@@ -1,7 +1,6 @@
 from model import Product, ProductCreate, ProductUpdate
 from repository import ProductRepository
 
-
 class ProductService:
     def __init__(self, repo: ProductRepository):
         self.repo = repo
@@ -11,7 +10,7 @@ class ProductService:
 
     def get_product(self, product_id: int) -> Product | None:
         return self.repo.get(product_id)
-    
+
     def get_products(
         self,
         min_price: int | None = None,
@@ -38,3 +37,5 @@ class ProductService:
         if product is None:
             raise ValueError("product_not_found")
         self.repo.delete(product)
+
+

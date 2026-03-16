@@ -2,7 +2,7 @@ from pydantic import field_validator
 from sqlmodel import Field, SQLModel
 
 
-class ProductCreate(SQLModel):
+class ProductBase(SQLModel):
     name: str = Field(min_length=2, max_length=80)
     price: int = Field(ge=0)
     in_stock: bool = True
@@ -15,23 +15,19 @@ class ProductCreate(SQLModel):
             raise ValueError("Name must contain at least 2 characters.")
         return normalized
 
-class ProductUpdate(SQLModel):
-    name: str = Field(min_length=2, max_length=80)
-    price: int = Field(ge=0)
-    in_stock: bool = True
+class ProductCreate(ProductBase):
+    pass
 
-    @field_validator("имя")
-    @classmethod
-    def validate_name(cls, value: str) -> str:
-        normalized = value.strip()
-        if len(normalized) < 2:
-            raise ValueError("Имя должно содержать не менее 2 символов.")
-        return normalized
 
-class Product(ProductCreate, table=True):
+class ProductUpdate(ProductBase):
+    pass
+
+class Product(ProductBase, table=True):
     __tablename__ = "products"
 
     id: int | None = Field(default=None, primary_key=True)
 
-class ProductOut(ProductCreate):
+class ProductOut(ProductBase):
     id: int
+
+

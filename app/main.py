@@ -7,12 +7,10 @@ from repository import init_db
 from router import router
 from settings import settings
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
     yield
-
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -25,7 +23,6 @@ app = FastAPI(
 )
 
 app.include_router(router)
-
 
 @app.get("/", tags=["Root"])
 async def root():
@@ -53,7 +50,6 @@ async def health_check():
         }
     )
 
-
 if __name__ == "__main__":
     import uvicorn
 
@@ -63,3 +59,5 @@ if __name__ == "__main__":
         port=8000,
         reload=settings.DEBUG,
     )
+
+
