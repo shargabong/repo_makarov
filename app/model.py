@@ -27,3 +27,11 @@ class ProductUpdate(SQLModel):
         if len(normalized) < 2:
             raise ValueError("Имя должно содержать не менее 2 символов.")
         return normalized
+
+class Product(ProductCreate, table=True):
+    __tablename__ = "произведение"
+
+    id: int | None = Field(default=None, primary_key=True)
+
+class ProductOut(ProductCreate):
+    id: int
