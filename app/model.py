@@ -7,12 +7,12 @@ class ProductCreate(SQLModel):
     price: int = Field(ge=0)
     in_stock: bool = True
 
-    @field_validator("Имя")
+    @field_validator("name")
     @classmethod
     def validate_name(cls, value: str) -> str:
         normalized = value.strip()
         if len(normalized) < 2:
-            raise ValueError("Имя должно содержать не менее 2 символов.")
+            raise ValueError("Name must contain at least 2 characters.")
         return normalized
 
 class ProductUpdate(SQLModel):
@@ -29,7 +29,7 @@ class ProductUpdate(SQLModel):
         return normalized
 
 class Product(ProductCreate, table=True):
-    __tablename__ = "произведение"
+    __tablename__ = "products"
 
     id: int | None = Field(default=None, primary_key=True)
 
