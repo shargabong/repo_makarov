@@ -42,3 +42,50 @@ def get_products(
                 detail="min_price must be less than or equal to max_price",
             ) from error
         raise
+
+@router.get("/{product_id}", response_model=ProductOut)
+def get_product(
+    product_id: int,
+    service: ProductService = Depends(get_service),
+):
+    product = service.get_product(product_id)
+    if product is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found",
+        )
+    return product
+
+
+@router.put("/{product_id}", response_model=ProductOut)
+def update_product(
+    product_id: int,
+    product_data: ProductUpdate,
+    service: ProductService = Depends(get_service),
+):
+    try:
+        return service.update_product(product_id, product_data)
+    except ValueError as error:
+        if str(error) == "product_not_found":
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Product not found",
+            ) from error
+        raise
+
+
+@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_product(
+    product_id: int,
+    service: ProductService = Depends(get_service),
+):
+    try:
+        service.delete_product(product_id)
+    except ValueError as error:
+        if str(error) == "product_not_found":
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Product not found",
+            ) from error
+        raise
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
